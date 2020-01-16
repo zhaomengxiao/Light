@@ -27,18 +27,29 @@ Scene& Scene::addSDF(SDF* sdf, const BoolOp bool_op)
 	return *this;
 }
 
-SDF* Scene::process(float x, float y)
+Result Scene::process(float x, float y)
 {
-	SDF* base;
-	/*SDF* base = sdf_list_[0];
-	base->SD(x, y);*/
-	for (int i = 1; i < sdf_list_.size(); ++i)
+	Result res;
+	if (!sdf_list_.empty())
 	{
-		SDF* another = sdf_list_[i];
-		base = sdf_list_[i - 1];
-		another->SD(x, y);
+		SDF* base = sdf_list_[0];
 		base->SD(x, y);
-		base = base->unionOp(another);
+		res = base->result;
+		for (int i = 1; i < sdf_list_.size(); ++i)
+		{
+			SDF* another = sdf_list_[i];
+			//SDF* base = sdf_list_[i - 1];
+			another->SD(x, y);
+			base->SD(x, y);
+			res = Result::unionOp(res,another->result);
+		}
 	}
-	return base;
+	
+	/*for (auto sdf : sdf_list_)
+	{
+		sdf->SD(x, y);
+	}
+	Result res = Result::unionOp(sdf_list_[0]->result, sdf_list_[1]->result);
+	res = Result::unionOp(res, sdf_list_[2]->result);*/
+	return res;
 }

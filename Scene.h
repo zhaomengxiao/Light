@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include <vector>
-
+#include "SDF.h"
 
 
 class SignedDistanceField;
@@ -24,11 +24,7 @@ enum class BoolOp
 };
 
 
-struct Result
-{
-	float sd;
-	float emissive;
-};
+
 
 inline const char* to_string(const BoolOp e)
 {
@@ -48,7 +44,7 @@ public:
 
 	//void addSDF(SDF sdf);
 	Scene& addSDF(SDF* sdf,BoolOp bool_op);
-	SDF* process(float x, float y);
+	Result process(float x, float y);
 private:
 	std::vector<SDF*>  sdf_list_;
 };

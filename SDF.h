@@ -1,5 +1,39 @@
 ﻿#pragma once
 
+struct Result
+{
+	Result() = default;
+
+	Result(float sd, float emissive)
+		: sd(sd),
+		  emissive(emissive)
+	{
+	}
+
+	float sd{0};
+	float emissive{0};
+
+	static Result unionOp(Result a, Result b)
+	{
+		return a.sd < b.sd ? a : b;
+
+	}
+
+	static Result intersectOp(Result a, Result b)
+	{
+		Result r = a.sd > b.sd ? b : a;
+		r.sd = a.sd > b.sd ? a.sd : b.sd;
+		return r;
+
+	}
+
+	static Result subtractOp(Result a, Result b)
+	{
+		Result r = a;
+		r.sd = (a.sd > -b.sd) ? a.sd : -b.sd;
+		return r;
+	}
+};
 
 /**
  * \brief 带符号距离场, SDF
@@ -8,27 +42,48 @@ class SignedDistanceField
 {
 public:
 
-	SignedDistanceField(const float emissive)
-		: sd(0), emissive(emissive)
+	explicit SignedDistanceField(const float emissive)
+		: result{ 0, emissive }
 	{
 	}
 
 	virtual ~SignedDistanceField() = default;
 	
-	virtual float SD(float x, float y) { return sd; }
+	virtual float SD(float x, float y) { return result.sd; }
 
-	float Emissive() const { return emissive; }
+	float Emissive() const { return result.emissive; }
 
-	SignedDistanceField* unionOp(SignedDistanceField* another);
+	Result getResult() const { return result; }
 
-	SignedDistanceField* intersectOp(SignedDistanceField* another);
+	Result result;
+};
 
-	SignedDistanceField* subtractOp(SignedDistanceField* another);
+class PlaneSDF : public SignedDistanceField
+{
+public:
+	/**
+	 * \brief 平面SDF
+	 * \param emissive 自发光强度
+	 * \param px 点x
+	 * \param py 点y
+	 * \param nx 法线x
+	 * \param ny 法线y
+	 */
+	PlaneSDF(float emissive, float px, float py, float nx, float ny)
+		: SignedDistanceField(emissive),
+		  px_(px),
+		  py_(py),
+		  nx_(nx),
+		  ny_(ny)
+	{
+	}
 
-	float sd;
-	float emissive;
-
-
+	float SD(float x, float y) override;
+private:
+	float px_;
+	float py_;
+	float nx_;
+	float ny_;
 };
 
 class PointSDF : public SignedDistanceField
@@ -36,7 +91,7 @@ class PointSDF : public SignedDistanceField
 public:
 
 	/**
-	 * \brief 
+	 * \brief 点SDF
 	 * \param emissive 自发光强度
 	 * \param x 点X坐标
 	 * \param y 点Y坐标
@@ -60,7 +115,7 @@ class CircleSDF : public SignedDistanceField
 public:
 	
 	/**
-	 * \brief 
+	 * \brief 圆SDF
 	 * \param emissive  :自发光强度
 	 * \param center_x  :圆心X坐标
 	 * \param center_y  :圆心Y坐标

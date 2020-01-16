@@ -61,6 +61,14 @@ SET(QT_LIB
     Qt5::Gui
     )
 
+SET(QT_BIN ${_qt5_root_dir}/../../bin)
+message("QT_dll目录：" ${QT_BIN} )
+set(QT_DLL 
+    ${QT_BIN}/Qt5Cored.dll
+    ${QT_BIN}/Qt5Guid.dll
+    ${QT_BIN}/Qt5Widgetsd.dll
+    )
+
 #添加dlib
 find_package(dlib REQUIRED)
 
@@ -69,4 +77,5 @@ add_executable(light ${LIGHT_HEADER_FILES} ${LIGHT_SOURCE_FILES})
 target_link_libraries(light ${QT_LIB} dlib::dlib)
 
 install (TARGETS light DESTINATION ${INSTALL_RPATH})
+install(FILES ${QT_DLL} DESTINATION ${INSTALL_RPATH})
 

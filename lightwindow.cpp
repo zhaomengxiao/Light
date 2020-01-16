@@ -1,5 +1,5 @@
 #include "lightwindow.h"
-#include <dlib/matrix.h>
+//#include <dlib/matrix.h>
 #include "macrodef.h"
 #include "Scene.h"
 #include "SDF.h"
@@ -32,9 +32,9 @@ float LightWindow::trace(float ox, float oy, float dx, float dy) {
 		my_scene.addSDF(circle_2, BoolOp::UNION_OP).addSDF(circle_3, BoolOp::UNION_OP);*/
 
 		const auto r = my_scene.process(ox + dx * t, oy + dy * t);
-		if (r->sd < EPSILON)
-			return r->emissive;
-		t += r->sd;
+		if (r.sd < EPSILON)
+			return r.emissive;
+		t += r.sd;
 	}
 	return 0.0f;
 }
@@ -53,11 +53,12 @@ float LightWindow::sample(float x, float y)
 
 void LightWindow::buildScene()
 {
-	CircleSDF* circle_1 = new CircleSDF(0.5f, 0.3f, 0.3f, 0.1f);
-	CircleSDF* circle_2 = new CircleSDF(1.0f, 0.3f, 0.7f, 0.1f);
-	CircleSDF* circle_3 = new CircleSDF(1.5f, 0.7f, 0.3f, 0.1f);
-	CircleSDF* circle_4 = new CircleSDF(2.0f, 0.7f, 0.7f, 0.1f);
-	my_scene.addSDF(circle_1, BoolOp::UNION_OP).addSDF(circle_2, BoolOp::UNION_OP).addSDF(circle_3, BoolOp::UNION_OP);
+	CircleSDF* circle_1 = new CircleSDF(2.0f, 0.3f, 0.3f, 0.10f);
+	CircleSDF* circle_2 = new CircleSDF(0.8f, 0.3f, 0.7f, 0.05f);
+	CircleSDF* circle_3 = new CircleSDF(0.0f, 0.7f, 0.5f, 0.10f);
+	PlaneSDF* plane_1 = new PlaneSDF(0.8, 0.0, 0.5, 0.0, 1.0);
+	//CircleSDF* circle_4 = new CircleSDF(0.9f, 0.7f, 0.7f, 0.16f);
+	my_scene.addSDF(circle_1, BoolOp::UNION_OP).addSDF(circle_2, BoolOp::UNION_OP).addSDF(circle_3, BoolOp::UNION_OP).addSDF(plane_1, BoolOp::UNION_OP);
 }
 
 void LightWindow::renderNow()
