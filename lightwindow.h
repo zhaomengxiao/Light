@@ -17,10 +17,6 @@ public:
 	void render(QPainter *painter) override;
 	void renderNow() override;
 
-	float trace(float ox, float oy, float dx, float dy);
-
-	float sample(float x, float y);
-
 	void buildScene();
 private:
 	Scene my_scene;

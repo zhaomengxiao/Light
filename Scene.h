@@ -2,6 +2,8 @@
 
 #include <vector>
 #include "SDF.h"
+#include "macrodef.h"
+
 
 
 class SignedDistanceField;
@@ -42,9 +44,31 @@ class Scene
 {
 public:
 
-	//void addSDF(SDF sdf);
-	Scene& addSDF(SDF* sdf,BoolOp bool_op);
+	Scene(unsigned width, unsigned height, unsigned sample_n)
+		: width_(width),
+		  height_(height),
+		  sample_n_(sample_n)
+	{
+	}
+
+	Scene& addSDF(SDF& sdf,BoolOp bool_op);
+	
 	Result process(float x, float y);
+
+	float trace(float ox, float oy, float dx, float dy);
+
+	float sample(float x, float y);
 private:
-	std::vector<SDF*>  sdf_list_;
+	std::vector<std::pair<SDF&, BoolOp>>  sdf_list_;
+	unsigned width_ { 100 };
+
+	unsigned height_ {100};
+
+	unsigned sample_n_ {64};
+
+	unsigned max_step_ {10};
+
+	float max_distance_ {5.0f};
+
+	float epsilon_ {1e-6f};
 };

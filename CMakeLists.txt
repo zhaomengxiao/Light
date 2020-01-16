@@ -36,6 +36,7 @@ message("编译后库程序文件目录: " ${LIBRARY_OUTPUT_PATH})
 
 #添加.h文件
 SET(LIGHT_HEADER_FILES
+	svpng.inc
     macrodef.h
 	SDF.h
 	Scene.h

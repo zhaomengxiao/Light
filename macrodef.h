@@ -2,11 +2,11 @@
 
 constexpr auto TWO_PI = 6.28318530718f;
 
-constexpr auto WIDTH = 100;
+constexpr unsigned WIDTH = 300;
 
-constexpr auto HEIGHT = 100;
+constexpr unsigned HEIGHT = 300;
 
-constexpr auto SAMPLE_N = 16;
+constexpr unsigned SAMPLE_N = 64;
 
 constexpr auto MAX_STEP = 10;
 
