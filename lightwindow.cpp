@@ -1,5 +1,5 @@
 #include "lightwindow.h"
-//#include <dlib/matrix.h>
+#include <dlib/matrix.h>
 #include "macrodef.h"
 #include "Scene.h"
 #include "SDF.h"

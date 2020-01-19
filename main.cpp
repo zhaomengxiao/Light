@@ -6,6 +6,8 @@
 #include "SDF.h"
 #include "Scene.h"
 
+#include <dlib/matrix.h>
+
 
 int main(int argc, char *argv)
 {
@@ -33,6 +35,16 @@ int main(int argc, char *argv)
 	FILE *fp;
 	fopen_s(&fp,"rgb.png", "wb");
 
+#ifdef parallel
+	dlib::parallel_for(0, HEIGHT, [&](int y) {
+			dlib::parallel_for(0, WIDTH, [&](int x) {
+				p[0] = p[1] = p[2] = int(fminf(my_scene.sample(float(x) / WIDTH, float(y) / HEIGHT) * 255.0f, 255.0f));
+				p += 3;
+			});
+		});
+		
+#else
+
 	for (int y = 0; y < HEIGHT; y++) {
 		for (int x = 0; x <WIDTH; x++ , p+=3) {
 			p[0] = p[1] = p[2] = int(fminf(
@@ -42,6 +54,7 @@ int main(int argc, char *argv)
 			//p[2] = color;    /* B */
 		}
 	}
+#endif
 	svpng(fp, WIDTH, HEIGHT, rgb, 0);
 	fclose(fp);
 	return 0;

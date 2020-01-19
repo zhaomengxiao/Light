@@ -5,25 +5,6 @@
 
 Scene& Scene::addSDF(SDF& sdf, const BoolOp bool_op)
 {
-	/*switch (bool_op)
-	{
-	case BoolOp::UNION_OP:
-		result_ = result_->unionOp(sdf);
-		return *this;
-		break;
-	case BoolOp::INTERSECT_OP:
-		result_ = result_->intersectOp(sdf);
-		return *this;
-		break;
-
-	case BoolOp::SUBTRACT_OP:
-		result_ = result_->subtractOp(sdf);
-		return *this;
-		break;
-	default:
-		std::cout<<"addSDF error, no such Op \n";
-		return *this;
-	}*/
 	sdf_list_.push_back({ sdf,bool_op });
 	return *this;
 }

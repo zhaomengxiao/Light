@@ -13,3 +13,5 @@ constexpr auto MAX_STEP = 10;
 constexpr auto MAX_DISTANCE =5.0f;
 
 constexpr auto EPSILON = 1e-6f;
+
+#define parallel
